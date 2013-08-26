@@ -13,9 +13,11 @@ def read(*parts):
 setup(
     name='django-conversejs',
     description='Adds converse.js (javascript XMPP client) to Django',
-    version='0.1',
+    version='0.2',
     long_description=read('README.rst'),
-    packages=['conversejs'],
+    packages=['conversejs',
+              'conversejs.migrations',
+              'converse.templatetags'],
     author='Sergio Oliveira',
     author_email='sergio@tracy.com.br',
     url='https://github.com/TracyWebTech/django-conversejs',
