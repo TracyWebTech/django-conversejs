@@ -20,19 +20,19 @@ Installing and configuring
 
 Install pure-sasl from ``TracyWebTech/digestmd5`` branch:
 
-.. code-block::
+.. code::
 
     pip install git+https://github.com/TracyWebTech/pure-sasl@digestmd5
 
 Install django-conversejs:
 
-.. code-block::
+.. code::
 
     pip install git+https://github.com/TracyWebTech/django-conversejs
 
 Add ``conversejs`` to installed apps in your settings.py:
 
-.. code-block:: python
+.. code:: python
 
     INSTALLED_APPS = {
         ...
@@ -42,13 +42,13 @@ Add ``conversejs`` to installed apps in your settings.py:
 
 Configure the BOSH service URL in your settings.py:
 
-.. code-block:: python
+.. code:: python
     
     CONVERSEJS_BOSH_SERVICE_URL = 'https://my-bosh-service.com'
 
 Load the static files in your templates using django-conversejs custom tags:
 
-.. code-block:: html+django
+.. code:: html+django
 
     {% load conversejs %}
     ...
@@ -60,7 +60,7 @@ Load the static files in your templates using django-conversejs custom tags:
 
 Load the chat panel and the Javascript initilizalizer also using our custom tags:
 
-.. code-block:: html+django
+.. code:: html+django
 
     {% load conversejs %}
     ...
@@ -71,7 +71,7 @@ Load the chat panel and the Javascript initilizalizer also using our custom tags
 
 Update database schema:
 
-.. code-block::
+.. code::
 
     python manage.py syncdb
     python manage.py migrate # optinal
