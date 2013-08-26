@@ -1,2 +1,2 @@
-recursive-include conversejs/static *
+recursive-include conversejs/static/conversejs *
 recursive-include conversejs/templates *.html
