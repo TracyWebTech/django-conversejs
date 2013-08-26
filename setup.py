@@ -17,7 +17,7 @@ setup(
     long_description=read('README.rst'),
     packages=['conversejs',
               'conversejs.migrations',
-              'converse.templatetags'],
+              'conversejs.templatetags'],
     author='Sergio Oliveira',
     author_email='sergio@tracy.com.br',
     url='https://github.com/TracyWebTech/django-conversejs',
