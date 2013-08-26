@@ -103,3 +103,18 @@ Converse.js Version
 We currently ship Converse.js **v0.5**.
 
 If you need a newer version, please open an issue or a pull request.
+
+
+
+IMPORTANT NOTE:
+---------------
+
+django-conversejs depends of `pure-sasl`, a Python library to perform SASL authentication.
+
+Currently the stable version of pure-sasl has a bug which doesn't allow us to use
+DIGEST-MD5 authentication, which happens to be the most recommend authentication
+method. That's why this instructions ask you to install pure-sasl from a repository
+which is not the official one. As soon as `pure-sasl` authors get the bugs fixed 
+we'll update the instructions.
+
+Sorry for the inconvenience.
