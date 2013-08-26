@@ -1,11 +1,13 @@
 django-conversejs
 =================
 
-Convese.js now it's also in Django!
+This app aims to make easier to integrate `Converse.js`_ into Django!
+
+.. _Converse.js: http://conversejs.org/
 
 
-TODO
------
+Converse.js Version
+-------------------
 
-* Update to converse.js last version
-* Include min files if DEBUG is set to False
+We currently ship converse.js v0.50.
+If you need to use a newer version please open an issue or pull request.
