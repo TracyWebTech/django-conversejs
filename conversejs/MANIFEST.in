@@ -1,0 +1,2 @@
+recursive-include conversejs/static *
+recursive-include conversejs/templates *.html
