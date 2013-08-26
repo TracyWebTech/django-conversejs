@@ -9,6 +9,7 @@ def read(*parts):
     return codecs.open(os.path.join(os.path.dirname(__file__), *parts),
                        encoding='utf8').read()
 
+
 setup(
     name='django-conversejs',
     description='Adds converse.js (javascript XMPP client) to Django',
@@ -30,4 +31,5 @@ setup(
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         ],
+    install_requires=['pure-sasl'],
 )
