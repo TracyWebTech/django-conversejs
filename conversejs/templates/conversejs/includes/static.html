@@ -1,6 +1,11 @@
 {% extends 'conversejs/includes/base.html' %}
 {% block conversejs_baseinclude %}
-<script data-main="{{ STATIC_URL }}converse.js/main" src="{{ STATIC_URL }}converse.js/Libraries/require-jquery.js"></script>
+
+
+<script type="text/javascript" src="{{ STATIC_URL }}converse.js/converse.min.js"></script>
+<!--
+<script data-main="{{ STATIC_URL }}converse.js/main" src="{{ STATIC_URL }}converse.js/components/requirejs/require.js"></script>
+ -->
 
 <link rel="stylesheet" href="{{ STATIC_URL }}converse.js/converse.min.css"
                                   type="text/css" media="screen, projection" />

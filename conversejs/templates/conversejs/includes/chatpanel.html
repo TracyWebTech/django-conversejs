@@ -1,9 +1,11 @@
 {% extends 'conversejs/includes/base.html' %}
+{% load i18n %}
+
 {% block conversejs_baseinclude %}
-<div id="chatpanel">
+<div id="chatpanel" style="display: none">
   <div id="collective-xmpp-chat-data"></div>
   <div id="toggle-controlbox">
-    <a href="#" class="chat toggle-online-users"><strong class="conn-feedback">Mensageiro</strong> <strong style="display: none" id="online-count">(0)</strong></a>
+    <a href="#" class="chat toggle-online-users"><strong class="conn-feedback">{% trans 'Toggle chat' %}</strong> <strong style="display: none" id="online-count">(0)</strong></a>
   </div>
 </div>
 {% endblock %}

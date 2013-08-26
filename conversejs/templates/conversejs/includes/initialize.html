@@ -1,17 +1,24 @@
 {% extends 'conversejs/includes/base.html' %}
 {% block conversejs_baseinclude %}
-<script>
-    require(["jquery", "converse"], function ($, converse) {
-        converse.initialize({
-            auto_list_rooms: {{ CONVERSEJS_AUTO_LIST_ROOMS }},
-            auto_subscribe: {{ CONVERSEJS_AUTO_SUBSCRIBE }},
-            bosh_service_url: '{{ CONVERSEJS_BOSH_SERVICE_URL }}',
-            hide_muc_server: {{ CONVERSEJS_HIDE_MUC_SERVER }},
-            i18n: locales['{{ request.LANGUAGE_CODE }}'],
-            prebind: {{ CONVERSEJS_PREBIND }},
-            show_controlbox_by_default: {{ CONVERSEJS_SHOW_CONTROLBOX_BY_DEFAULT }},
-            xhr_user_search: {{ CONVERSEJS_XHR_USER_SEARCH }}
+{% if jid and sid and rid %}
+    <script type="text/javascript">
+        require(['converse'], function (converse) {
+            converse.initialize({
+                auto_list_rooms: {{ CONVERSEJS_AUTO_LIST_ROOMS }},
+                auto_subscribe: {{ CONVERSEJS_AUTO_SUBSCRIBE }},
+                hide_muc_server: {{ CONVERSEJS_HIDE_MUC_SERVER }},
+                i18n: locales['{{ request.LANGUAGE_CODE }}'],
+                prebind: {{ CONVERSEJS_PREBIND }},
+                show_controlbox_by_default: {{ CONVERSEJS_SHOW_CONTROLBOX_BY_DEFAULT }},
+                xhr_user_search: {{ CONVERSEJS_XHR_USER_SEARCH }},
+                debug: {{ CONVERSEJS_DEBUG }}
+            });
+            connection = new Strophe.Connection('{{ CONVERSEJS_BOSH_SERVICE_URL }}');
+            connection.attach('{{ jid }}', '{{ sid }}', {{ rid }}, function() {
+                converse.onConnected(connection);
+                $('#chatpanel').show();
+            });
         });
-    });
-</script>
+    </script>
+{% endif %}
 {% endblock %}
