@@ -75,8 +75,28 @@ Update database schema:
 
     python manage.py syncdb
     python manage.py migrate # optinal
-    
-    
+
+
+Adding an XMPP account
+----------------------
+
+* Log in the Django Admin
+
+* Add an XMPP account by clicking in the '+ Add' button
+
+* Choose the user from the select box and them type the JabberID and password for the account
+
+Now everytime the select user your logs in your site he will be automaticaly logged in the XMPP
+server using the credentials you provided.
+
+
+Forms
+------
+
+If you want to create custom forms to keep the look and feel of your site you can use
+conversejs.forms as a start point.
+
+
 Converse.js Version
 -------------------
 
