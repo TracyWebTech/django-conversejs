@@ -9,6 +9,12 @@ def read(*parts):
     return codecs.open(os.path.join(os.path.dirname(__file__), *parts),
                        encoding='utf8').read()
 
+package_data_globs = [
+    'templates/conversejs/includes/*.html',
+    'static/converse.js/*.js',
+    'static/converse.js/*.css',
+    'static/converse.js/images/*',
+]
 
 setup(
     name='django-conversejs',
@@ -18,6 +24,8 @@ setup(
     packages=['conversejs',
               'conversejs.migrations',
               'conversejs.templatetags'],
+    package_dir={'conversejs': 'conversejs'},
+    package_data={'conversejs': package_data_globs},
     author='Sergio Oliveira',
     author_email='sergio@tracy.com.br',
     url='https://github.com/TracyWebTech/django-conversejs',
