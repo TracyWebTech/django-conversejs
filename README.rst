@@ -74,7 +74,7 @@ Update database schema:
 ::
 
     python manage.py syncdb
-    python manage.py migrate # optinal
+    python manage.py migrate # optional
 
 
 Adding an XMPP account
