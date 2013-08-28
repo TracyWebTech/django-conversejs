@@ -206,7 +206,6 @@ class BOSHClient(object):
         auth.set('xmlns', XMPP_SASL_NS)
         auth.set('mechanism', mechanism)
 
-        response = self.send_request(body)
         resp_root = ET.fromstring(self.send_request(body))
         challenge_node = resp_root.find('{{{}}}challenge'.format(XMPP_SASL_NS))
 
