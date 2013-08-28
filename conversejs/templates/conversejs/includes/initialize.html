@@ -11,12 +11,11 @@
                 prebind: {{ CONVERSEJS_PREBIND }},
                 show_controlbox_by_default: {{ CONVERSEJS_SHOW_CONTROLBOX_BY_DEFAULT }},
                 xhr_user_search: {{ CONVERSEJS_XHR_USER_SEARCH }},
+                bosh_service_url: '{{ CONVERSEJS_BOSH_SERVICE_URL }}',
+                jid: '{{ jid }}',
+                sid: '{{ sid }}',
+                rid: '{{ rid }}',
                 debug: {{ CONVERSEJS_DEBUG }}
-            });
-            connection = new Strophe.Connection('{{ CONVERSEJS_BOSH_SERVICE_URL }}');
-            connection.attach('{{ jid }}', '{{ sid }}', {{ rid }}, function() {
-                converse.onConnected(connection);
-                $('#chatpanel').show();
             });
         });
     </script>
