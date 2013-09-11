@@ -1,6 +1,6 @@
 
-import codecs
 import os
+import codecs
 
 from setuptools import setup
 
@@ -41,5 +41,9 @@ setup(
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         ],
-    install_requires=['pure-sasl'],
+    install_requires=[
+        'pure-sasl',
+        'sleekxmpp==1.1.11',
+        'dnspython==1.11.1',
+        ],
 )

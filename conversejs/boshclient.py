@@ -39,7 +39,7 @@ class BOSHClient(object):
         of the BOSH service to connect to.
 
         """
-        self.log = logging.getLogger('boshclient')
+        self.log = logging.getLogger('conversejs.boshclient')
         self.log.addHandler(logging.NullHandler())
 
         self._connection = None
