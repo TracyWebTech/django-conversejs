@@ -15,6 +15,7 @@ from urlparse import urlparse
 from xml.etree import ElementTree as ET
 
 from puresasl.client import SASLClient
+from .conf import get_conversejs_settings
 
 
 HTTPBIND_NS = 'http://jabber.org/protocol/httpbind'
@@ -61,6 +62,9 @@ class BOSHClient(object):
         }
 
         self.server_auth = []
+
+        converse_settings = get_conversejs_settings()
+        self.xml_encoding_line = converse_settings['CONVERSEJS_XML_ENCODING_LINE']
 
     @property
     def connection(self):
@@ -123,7 +127,9 @@ class BOSHClient(object):
     def send_request(self, xml_stanza):
         ElementType = getattr(ET, '_Element', ET.Element)
         if isinstance(xml_stanza, ElementType):
-            xml_stanza = ET.tostring(xml_stanza, encoding='utf8', method='xml')
+            xml_stanza = ET.tostring(
+                xml_stanza, encoding='utf8', method='xml'
+            ) if self.xml_encoding_line else ET.tostring(xml_stanza)
 
         self.log.debug('XML_STANZA: %s', xml_stanza)
         self.log.debug('Sending the request')
