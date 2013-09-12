@@ -133,6 +133,7 @@ If you need a newer version, please open an issue or a pull request.
 TODO
 ----
 
+* Write tests
 * Allow user reset XMPP account password. That's useful to allow the use of other xmpp clients.
 * Allow user to set avatar
 * Auto update XMPP name and email when those are updated in django (using signals)
