@@ -17,7 +17,7 @@ def get_conversejs_context(context, xmpp_login=False):
         return context
 
     bosh = BOSHClient(xmpp_account.jid, xmpp_account.password,
-                      context.CONVERSEJS_BOSH_SERVICE_URL)
+                      context['CONVERSEJS_BOSH_SERVICE_URL'])
     jid, sid, rid = bosh.get_credentials()
     context.update({'jid': jid, 'sid': sid, 'rid': rid})
 
