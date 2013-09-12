@@ -43,7 +43,7 @@ Add ``conversejs`` to installed apps in your settings.py:
 Configure the BOSH service URL in your settings.py:
 
 .. code-block:: python
-    
+
     CONVERSEJS_BOSH_SERVICE_URL = 'https://my-bosh-service.com'
 
 Load the static files in your templates using django-conversejs custom tags:
@@ -64,7 +64,7 @@ Load the chat panel and the Javascript initilizalizer also using our custom tags
 
     {% load conversejs %}
     ...
-    
+
       {% conversejs_chatpanel %}
       {% conversejs_initialize %}
     </body>
@@ -88,6 +88,31 @@ Adding an XMPP account
 
 Now everytime the select user your logs in your site he will be automaticaly logged in the XMPP
 server using the credentials you provided.
+
+
+Enabling XMPP auto registration
+--------------------------------
+
+By enabling auto registration ```django-conversejs``` will attempt to create a new
+XMPP account for every user that doesn't have one as soon as they login in your site.
+
+To enable you just need to add the ```CONVERSEJS_AUTO_REGISTER``` option to your
+settings.py setting it to the domain of your XMPP service. Notice that the XMPP
+server and the BOSH service URL are two different things.
+
+For example:
+
+.. code-block:: python
+
+    CONVERSEJS_BOSH_SERVICE_URL = 'https://my-bosh-service.com'
+
+    CONVERSEJS_AUTO_REGISTER = 'xmpp.mycompany.com'
+
+
+In the example above Django will get the username from ```request.user.username``` and
+try to register under the xmpp domain ```xmpp.mycompany.com```, so if an user john logs in it would try to register ```john@xmpp.mycompany.com```.
+
+If registration fails for any reason ```django-conversejs``` will attempt again on every request. That's something to be improved.
 
 
 Forms
@@ -121,7 +146,7 @@ django-conversejs depends of `pure-sasl`, a Python library to perform SASL authe
 Currently the stable version of pure-sasl has a bug which doesn't allow us to use
 DIGEST-MD5 authentication, which happens to be the most recommend authentication
 method. That's why this instructions ask you to install pure-sasl from a repository
-which is not the official one. As soon as `pure-sasl` authors get the bugs fixed 
+which is not the official one. As soon as `pure-sasl` authors get the bugs fixed
 we'll update the instructions.
 
 Sorry for the inconvenience.
