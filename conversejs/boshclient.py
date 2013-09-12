@@ -64,7 +64,8 @@ class BOSHClient(object):
         self.server_auth = []
 
         converse_settings = get_conversejs_settings()
-        self.xml_encoding_line = converse_settings['CONVERSEJS_XML_ENCODING_LINE']
+        xml_encoding_line = converse_settings['CONVERSEJS_XML_ENCODING_LINE']
+        self.xml_encoding_line = True if xml_encoding_line.lower() == 'true' else False
 
     @property
     def connection(self):
