@@ -93,10 +93,10 @@ server using the credentials you provided.
 Enabling XMPP auto registration
 --------------------------------
 
-By enabling auto registration ```django-conversejs``` will attempt to create a new
+By enabling auto registration ``django-conversejs`` will attempt to create a new
 XMPP account for every user that doesn't have one as soon as they login in your site.
 
-To enable you just need to add the ```CONVERSEJS_AUTO_REGISTER``` option to your
+To enable you just need to add the ``CONVERSEJS_AUTO_REGISTER`` option to your
 settings.py setting it to the domain of your XMPP service. Notice that the XMPP
 server and the BOSH service URL are two different things.
 
@@ -109,10 +109,10 @@ For example:
     CONVERSEJS_AUTO_REGISTER = 'xmpp.mycompany.com'
 
 
-In the example above Django will get the username from ```request.user.username``` and
-try to register under the xmpp domain ```xmpp.mycompany.com```, so if an user john logs in it would try to register ```john@xmpp.mycompany.com```.
+In the example above Django will get the username from ``request.user.username`` and
+try to register under the xmpp domain ``xmpp.mycompany.com``, so if an user john logs in it would try to register ``john@xmpp.mycompany.com``.
 
-If registration fails for any reason ```django-conversejs``` will attempt again on every request. That's something to be improved.
+If registration fails for any reason ``django-conversejs`` will attempt again on every request. That's something to be improved.
 
 
 Forms
