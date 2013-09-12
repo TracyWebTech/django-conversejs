@@ -40,7 +40,9 @@ class BOSHClient(object):
 
         """
         self.log = logging.getLogger('boshclient')
-        self.log.addHandler(logging.NullHandler())
+
+        if hasattr(logging, 'NullHandler'):
+            self.log.addHandler(logging.NullHandler())
 
         self._connection = None
         self._sid = None
