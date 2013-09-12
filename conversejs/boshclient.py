@@ -18,6 +18,14 @@ from puresasl.client import SASLClient
 from .conf import get_conversejs_settings
 
 
+try:  # Python 2.7+
+    from logging import NullHandler
+except ImportError:
+    class NullHandler(logging.Handler):
+        def emit(self, record):
+            pass
+
+
 HTTPBIND_NS = 'http://jabber.org/protocol/httpbind'
 BOSH_NS = 'urn:xmpp:xbosh'
 XMPP_SASL_NS = 'urn:ietf:params:xml:ns:xmpp-sasl'
@@ -41,9 +49,7 @@ class BOSHClient(object):
 
         """
         self.log = logging.getLogger('boshclient')
-
-        if hasattr(logging, 'NullHandler'):
-            self.log.addHandler(logging.NullHandler())
+        self.log.addHandler(logging.NullHandler())
 
         self._connection = None
         self._sid = None
