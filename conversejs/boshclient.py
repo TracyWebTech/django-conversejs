@@ -14,7 +14,7 @@ from random import randint
 from urlparse import urlparse
 from xml.etree import ElementTree as ET
 
-from puresasl.client import SASLClient 
+from puresasl.client import SASLClient
 
 
 HTTPBIND_NS = 'http://jabber.org/protocol/httpbind'
@@ -44,23 +44,23 @@ class BOSHClient(object):
 
         self._connection = None
         self._sid = None
-        
+
         self.jid, self.to = jid.split('@')
         self.password = password
-        self.bosh_service = urlparse(bosh_service) 
-        
+        self.bosh_service = urlparse(bosh_service)
+
         self.rid = randint(0, 10000000)
         self.log.debug('Init RID: %s' % self.rid)
-        
+
         self.headers = {
             "Content-Type": "text/plain; charset=UTF-8",
             "Accept": "text/xml",
             "Accept-Encoding": "gzip, deflate"
         }
-        
+
         self.server_auth = []
-   
-    @property 
+
+    @property
     def connection(self):
         """Returns an stablished connection"""
 
@@ -74,9 +74,9 @@ class BOSHClient(object):
         elif self.bosh_service.scheme == 'https':
             Connection = httplib.HTTPSConnection
         else:
-            # TODO: raise proper exception 
+            # TODO: raise proper exception
             raise Exception('Invalid URL scheme %s' % self.bosh_service.scheme)
-        
+
         self._connection = Connection(self.bosh_service.netloc)
         self.log.debug('Connection initialized')
         # TODO add exceptions handler there (URL not found etc)
@@ -86,7 +86,7 @@ class BOSHClient(object):
     def close_connection(self):
         if not self._connection:
             self.log.debug('Trying to close connection before initializing it.')
-            return 
+            return
 
         self.log.debug('Closing connection')
         self.connection.close()
@@ -99,7 +99,7 @@ class BOSHClient(object):
         body.set('xmlns', HTTPBIND_NS)
 
         if sid_request:
-            body.set('xmlns:xmpp', BOSH_NS) 
+            body.set('xmlns:xmpp', BOSH_NS)
             body.set('wait', unicode(BOSH_WAIT))
             body.set('hold', unicode(BOSH_HOLD))
             body.set('content', BOSH_CONTENT)
@@ -112,7 +112,7 @@ class BOSHClient(object):
             body.set('to', self.to)
 
         if self._sid:
-            body.set('sid', self.sid) 
+            body.set('sid', self.sid)
 
         body.set('rid', str(self.rid))
 
@@ -147,7 +147,7 @@ class BOSHClient(object):
     def sid(self):
         if self._sid:
             return self._sid
-        
+
         return self.request_sid()
 
     def request_sid(self):
@@ -160,44 +160,44 @@ class BOSHClient(object):
             return self._sid
 
         self.log.debug('Prepare to request BOSH session')
-        
+
         data = self.send_request(self.get_body(sid_request=True))
         if not data:
             return None
-      
+
 
         # This is XML. response_body contains the <body/> element of the
         # response.
         response_body = ET.fromstring(data)
-        
+
         # Get the remote Session ID
         self._sid = response_body.get('sid')
         self.log.debug('sid = %s' % self._sid)
-        
+
         # Get the longest time (s) that the XMPP server will wait before
         # responding to any request.
         self.server_wait = response_body.get('wait')
         self.log.debug('wait = %s' % self.server_wait)
-        
+
         # Get the authid
         self.authid = response_body.get('authid')
-        
+
         # Get the allowed authentication methods using xpath
-        search_for = '{{{}}}features/{{{}}}mechanisms/{{{}}}mechanism'.format(
+        search_for = '{{{0}}}features/{{{1}}}mechanisms/{{{2}}}mechanism'.format(
                                 JABBER_STREAMS_NS, XMPP_SASL_NS, XMPP_SASL_NS)
         self.log.debug('Looking for "%s" into response body', search_for)
         mechanisms = response_body.iterfind(search_for)
         self.server_auth = []
 
         for mechanism in mechanisms:
-            self.server_auth.append(mechanism.text) 
+            self.server_auth.append(mechanism.text)
             self.log.debug('New AUTH method: %s' % mechanism.text)
 
         if not self.server_auth:
             self.log.debug(('The server didn\'t send the allowed '
                             'authentication methods'))
             self._sid = None
-                    
+
         return self._sid
 
     def get_challenge(self, mechanism):
@@ -207,10 +207,10 @@ class BOSHClient(object):
         auth.set('mechanism', mechanism)
 
         resp_root = ET.fromstring(self.send_request(body))
-        challenge_node = resp_root.find('{{{}}}challenge'.format(XMPP_SASL_NS))
+        challenge_node = resp_root.find('{{{0}}}challenge'.format(XMPP_SASL_NS))
 
         if challenge_node is not None:
-            return challenge_node.text 
+            return challenge_node.text
 
         return None
 
@@ -222,7 +222,7 @@ class BOSHClient(object):
 
         # Create a response tag and add the response content on it
         #   using base64 encoding
-        response_node = ET.SubElement(body, 'response')  
+        response_node = ET.SubElement(body, 'response')
         response_node.set('xmlns', XMPP_SASL_NS)
         response_node.text = base64.b64encode(response_plain)
 
@@ -230,8 +230,8 @@ class BOSHClient(object):
         resp_root = ET.fromstring(self.send_request(body))
 
         # Look for the success tag. If it's not present authentication
-        #   has failed 
-        success = resp_root.find('{{{}}}success'.format(XMPP_SASL_NS))
+        #   has failed
+        success = resp_root.find('{{{0}}}success'.format(XMPP_SASL_NS))
         if success is not None:
             return True
         return False
@@ -243,7 +243,7 @@ class BOSHClient(object):
 
         self.log.debug('Prepare the XMPP authentication')
 
-        # Instantiate a sasl object 
+        # Instantiate a sasl object
         sasl = SASLClient(host=self.to,
                          service='xmpp',
                          username=self.jid,
@@ -254,7 +254,7 @@ class BOSHClient(object):
 
         # Request challenge
         challenge = self.get_challenge(sasl.mechanism)
-        
+
         # Process challenge and generate response
         response = sasl.process(base64.b64decode(challenge))
 
@@ -266,7 +266,7 @@ class BOSHClient(object):
         self.request_restart()
 
         self.bind_resource()
-        
+
         return True
 
     def bind_resource(self):
@@ -275,10 +275,10 @@ class BOSHClient(object):
         iq = ET.SubElement(body, 'iq')
         iq.set('id', 'bind_1')
         iq.set('type', 'set')
-        iq.set('xmlns', JABBER_CLIENT_NS) 
+        iq.set('xmlns', JABBER_CLIENT_NS)
 
         bind = ET.SubElement(iq, 'bind')
-        bind.set('xmlns', XMPP_BIND_NS)    
+        bind.set('xmlns', XMPP_BIND_NS)
 
         self.send_request(body)
 
@@ -289,18 +289,18 @@ class BOSHClient(object):
         self.send_request(body)
 
     def get_credentials(self):
-        success = self.authenticate_xmpp()            
+        success = self.authenticate_xmpp()
         if not success:
             return None, None, None
 
-        return u'{}@{}'.format(self.jid, self.to), self.sid, self.rid 
-        
+        return u'{0}@{1}'.format(self.jid, self.to), self.sid, self.rid
+
 
 if __name__ == '__main__':
     import sys
 
     if len(sys.argv) != 4:
-        print 'usage: {} SERVICE_URL USERNAME PASSWORD'.format(sys.argv[0])
+        print 'usage: {0} SERVICE_URL USERNAME PASSWORD'.format(sys.argv[0])
         sys.exit(1)
 
     c = BOSHClient(sys.argv[2], sys.argv[3], sys.argv[1])
