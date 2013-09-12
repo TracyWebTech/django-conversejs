@@ -127,9 +127,8 @@ class BOSHClient(object):
     def send_request(self, xml_stanza):
         ElementType = getattr(ET, '_Element', ET.Element)
         if isinstance(xml_stanza, ElementType):
-            xml_stanza = ET.tostring(
-                xml_stanza, encoding='utf8', method='xml'
-            ) if self.xml_encoding_line else ET.tostring(xml_stanza)
+            xml_stanza = ET.tostring(xml_stanza) if not self.xml_encoding_line\
+                else ET.tostring(xml_stanza, encoding='utf8')
 
         self.log.debug('XML_STANZA: %s', xml_stanza)
         self.log.debug('Sending the request')
