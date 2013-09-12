@@ -86,7 +86,7 @@ Adding an XMPP account
 
 * Choose the user from the select box and them type the JabberID and password for the account
 
-Now everytime the select user your logs in your site he will be automaticaly logged in the XMPP
+Now everytime the select user your logs in your site he will be automatically logged in the XMPP
 server using the credentials you provided.
 
 
