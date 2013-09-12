@@ -121,7 +121,8 @@ class BOSHClient(object):
         return body
 
     def send_request(self, xml_stanza):
-        if isinstance(xml_stanza, ET.Element):
+        ElementType = getattr(ET, '_Element', ET.Element)
+        if isinstance(xml_stanza, ElementType):
             xml_stanza = ET.tostring(xml_stanza, encoding='utf8', method='xml')
 
         self.log.debug('XML_STANZA: %s', xml_stanza)
