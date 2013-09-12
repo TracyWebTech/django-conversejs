@@ -100,10 +100,17 @@ conversejs.forms as a start point.
 Converse.js Version
 -------------------
 
-We currently ship Converse.js **v0.6.2**.
+We currently ship Converse.js **v0.6.3**.
 
 If you need a newer version, please open an issue or a pull request.
 
+
+TODO
+----
+
+* Allow user reset XMPP account password. That's useful to allow the use of other xmpp clients.
+* Allow user to set avatar
+* Auto update XMPP name and email when those are updated in django (using signals)
 
 
 IMPORTANT NOTE:
