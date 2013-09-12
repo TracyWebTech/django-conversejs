@@ -1,4 +1,6 @@
 
+import uuid
+
 from django.conf import settings
 from .models import XMPPAccount
 from .boshclient import BOSHClient
@@ -44,10 +46,10 @@ def get_conversejs_context(context, xmpp_login=False):
             return context
 
         xmpp_jid = request.user.username + u'@' + jid_domain
-        xmpp_password = '123'
-        # ... password = get_password()
+        xmpp_password = uuid.uuid4().hex # get a random uuid as password
 
-        registered = register_account(xmpp_jid, xmpp_password)
+        registered = register_account(xmpp_jid, xmpp_password,
+                                      request.user.get_full_name(), request.user.email)
 
         if not registered:
             return context

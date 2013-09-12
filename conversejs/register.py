@@ -46,8 +46,11 @@ class RegisterBot(sleekxmpp.ClientXMPP):
           workflows will need to check for data forms, etc.
     """
 
-    def __init__(self, jid, password):
+    def __init__(self, jid, password, name=None, email=None):
         sleekxmpp.ClientXMPP.__init__(self, jid, password)
+
+        self.name = name
+        self.email = email
 
         # The session_start event will be triggered when
         # the bot establishes its connection with the server
@@ -102,10 +105,17 @@ class RegisterBot(sleekxmpp.ClientXMPP):
         To get the list of basic registration fields, you can use:
             iq['register']['fields']
         """
+
         resp = self.Iq()
         resp['type'] = 'set'
         resp['register']['username'] = self.boundjid.user
         resp['register']['password'] = self.password
+
+        if self.name:
+            resp['register']['name'] = self.name
+
+        if self.email:
+            resp['register']['email'] = self.email
 
         # TODO: Raise exception if fails
         try:
@@ -120,11 +130,11 @@ class RegisterBot(sleekxmpp.ClientXMPP):
             self.disconnect()
 
 
-def register_account(jid, password):
+def register_account(jid, password, name=None, email=None):
     # Setup the RegisterBot and register plugins. Note that while plugins may
     # have interdependencies, the order in which you register them does
     # not matter.
-    xmpp = RegisterBot(jid, password)
+    xmpp = RegisterBot(jid, password, name, email)
     xmpp.register_plugin('xep_0030') # Service Discovery
     xmpp.register_plugin('xep_0004') # Data forms
     xmpp.register_plugin('xep_0066') # Out-of-band Data
