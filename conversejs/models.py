@@ -15,4 +15,4 @@ class XMPPAccount(models.Model):
     password = models.CharField(max_length=1024)
 
     def __unicode__(self):
-        return u'{}/{}'.format(self.user, self.jid)
+        return u'{0}/{1}'.format(self.user, self.jid)
