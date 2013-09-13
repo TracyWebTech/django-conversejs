@@ -15,7 +15,6 @@ from urlparse import urlparse
 from xml.etree import ElementTree as ET
 
 from puresasl.client import SASLClient
-from .conf import get_conversejs_settings
 
 
 try:  # Python 2.7+
@@ -68,10 +67,6 @@ class BOSHClient(object):
         }
 
         self.server_auth = []
-
-        converse_settings = get_conversejs_settings()
-        xml_encoding_line = converse_settings['CONVERSEJS_XML_ENCODING_LINE']
-        self.xml_encoding_line = True if xml_encoding_line.lower() == 'true' else False
 
     @property
     def connection(self):
@@ -134,8 +129,7 @@ class BOSHClient(object):
     def send_request(self, xml_stanza):
         ElementType = getattr(ET, '_Element', ET.Element)
         if isinstance(xml_stanza, ElementType):
-            xml_stanza = ET.tostring(xml_stanza) if not self.xml_encoding_line\
-                else ET.tostring(xml_stanza, encoding='utf8')
+            xml_stanza = ET.tostring(xml_stanza)
 
         self.log.debug('XML_STANZA: %s', xml_stanza)
         self.log.debug('Sending the request')

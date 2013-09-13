@@ -1,7 +1,7 @@
 
 import uuid
 
-from .conf import get_conversejs_settings
+from .conf import get_conversejs_settings, CONVERSEJS_AUTO_REGISTER
 from .models import XMPPAccount
 from .boshclient import BOSHClient
 from .register import register_account
@@ -18,7 +18,7 @@ def get_conversejs_context(context, xmpp_login=False):
     try:
         xmpp_account = XMPPAccount.objects.get(user=request.user.pk)
     except XMPPAccount.DoesNotExist:
-        jid_domain = getattr(settings, 'CONVERSEJS_AUTO_REGISTER', False)
+        jid_domain = CONVERSEJS_AUTO_REGISTER
         if not jid_domain:
             return context
 

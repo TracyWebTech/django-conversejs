@@ -1,7 +1,17 @@
 from django.conf import settings
 
 
+# Django-conversejs settings
+CONVERSEJS_AUTO_REGISTER = getattr(settings, 'CONVERSEJS_AUTO_REGISTER', False)
+
+
 def get_conversejs_settings():
+    """This helper function returns all the configuration needed by
+    Converse.js frontend (javascript).
+
+    Configurations specific to django-conversejs should be added above.
+
+    """
     converse_settings = {
         'CONVERSEJS_AUTO_LIST_ROOMS': False,
         'CONVERSEJS_AUTO_SUBSCRIBE': False,
@@ -10,7 +20,6 @@ def get_conversejs_settings():
         'CONVERSEJS_PREBIND': True,
         'CONVERSEJS_SHOW_CONTROLBOX_BY_DEFAULT': False,
         'CONVERSEJS_XHR_USER_SEARCH': False,
-        'CONVERSEJS_XML_ENCODING_LINE': True,
         'CONVERSEJS_DEBUG': settings.DEBUG,
     }
 
@@ -23,3 +32,4 @@ def get_conversejs_settings():
         converse_settings[key] = conf
 
     return converse_settings
+
