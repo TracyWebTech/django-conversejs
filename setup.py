@@ -19,7 +19,7 @@ package_data_globs = [
 setup(
     name='django-conversejs',
     description='Adds converse.js (javascript XMPP client) to Django',
-    version='0.2.4',
+    version='0.2.5',
     long_description=read('README.rst'),
     packages=['conversejs',
               'conversejs.migrations',
