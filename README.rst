@@ -131,7 +131,7 @@ conversejs.forms as a start point.
 Converse.js Version
 -------------------
 
-We currently ship Converse.js **v0.6.3**.
+We currently ship Converse.js **v0.6.4**.
 
 If you need a newer version, please open an issue or a pull request.
 
