@@ -24,6 +24,12 @@ Install pure-sasl from ``TracyWebTech/digestmd5`` branch:
 
     pip install git+https://github.com/TracyWebTech/pure-sasl@digestmd5
 
+Install SleekXMPP from ``TracyWebTech/fix-gevent`` branch:
+
+::
+
+    pip install git+https://github.com/TracyWebTech/SleekXMPP@fix-gevent
+
 Install django-conversejs:
 
 ::
@@ -149,5 +155,7 @@ DIGEST-MD5 authentication, which happens to be the most recommend authentication
 method. That's why this instructions ask you to install pure-sasl from a repository
 which is not the official one. As soon as `pure-sasl` authors get the bugs fixed
 we'll update the instructions.
+
+It also depends on `SleekXMPP` that currently has a bug when used with gevent. This bug has been already fixed in the development branch but still not released as stable. While this is not released the install instructions will point to TracyWebTech repository that has the stable version with the gevent patch applied.
 
 Sorry for the inconvenience.
