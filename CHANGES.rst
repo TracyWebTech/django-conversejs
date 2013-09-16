@@ -2,6 +2,12 @@ Changelog
 =========
 
 
+Not released
+------------
+
+- Added converse.js fonticons to static files [seocam]
+
+
 0.2.5 (2013-09-16)
 ------------------
 
