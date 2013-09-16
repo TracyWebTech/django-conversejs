@@ -11,7 +11,7 @@ Not released
 0.2.5 (2013-09-16)
 ------------------
 
-- Fixed some python2.6 imcompatibility issues [chenhouwu]
+- Fixed some python2.6 incompatibility issues [chenhouwu]
 - Updated requirements on SleekXMPP [seocam]
 - Updating converse.js from 0.6.3 to 0.6.4 [seocam]
 
