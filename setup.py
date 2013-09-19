@@ -42,7 +42,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         ],
     install_requires=[
-        'pure-sasl',
+        'pure-sasl==0.1.5',
         'sleekxmpp==1.1.11',
         'dnspython==1.11.1',
         ],
