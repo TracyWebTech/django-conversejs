@@ -18,11 +18,6 @@ Currently ``django-conversejs`` provides:
 Installing and configuring
 ---------------------------
 
-Install pure-sasl from ``TracyWebTech/digestmd5`` branch:
-
-::
-
-    pip install git+https://github.com/TracyWebTech/pure-sasl@digestmd5
 
 Install SleekXMPP from ``TracyWebTech/fix-gevent`` branch:
 
@@ -131,7 +126,7 @@ conversejs.forms as a start point.
 Converse.js Version
 -------------------
 
-We currently ship Converse.js **v0.6.4**.
+We currently ship Converse.js **v0.6.4 (patched)**.
 
 If you need a newer version, please open an issue or a pull request.
 
@@ -148,14 +143,7 @@ TODO
 IMPORTANT NOTE:
 ---------------
 
-django-conversejs depends of `pure-sasl`, a Python library to perform SASL authentication.
 
-Currently the stable version of pure-sasl has a bug which doesn't allow us to use
-DIGEST-MD5 authentication, which happens to be the most recommend authentication
-method. That's why this instructions ask you to install pure-sasl from a repository
-which is not the official one. As soon as `pure-sasl` authors get the bugs fixed
-we'll update the instructions.
-
-It also depends on `SleekXMPP` that currently has a bug when used with gevent. This bug has been already fixed in the development branch but still not released as stable. While this is not released the install instructions will point to TracyWebTech repository that has the stable version with the gevent patch applied.
+django-conversejs depends of `SleekXMPP` that currently has a bug when used with gevent. This bug has been already fixed in the development branch but still not released as stable. While this is not released the install instructions will point to TracyWebTech repository that has the stable version with the gevent patch applied.
 
 Sorry for the inconvenience.
