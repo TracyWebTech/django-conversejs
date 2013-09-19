@@ -2,10 +2,12 @@ Changelog
 =========
 
 
-Not released
+0.2.6 (2013-09-19)
 ------------
 
 - Added converse.js fonticons to static files [seocam]
+- Converse.js updated. Version 0.6.4 still used but with a patch applied to CSS to avoid clashing with Bootstrap. [seocam]
+- Updating setup to use pure-sasl from PyPI [seocam]
 
 
 0.2.5 (2013-09-16)
