@@ -2,8 +2,14 @@ Changelog
 =========
 
 
-0.2.6 (2013-09-19)
+not released
 ------------
+
+- Added CONVERSEJS_ENABLED setting. This allows the easily disable conversejs from the website. [seocam]
+
+
+0.2.6 (2013-09-19)
+------------------
 
 - Added converse.js fonticons to static files [seocam]
 - Converse.js updated. Version 0.6.4 still used but with a patch applied to CSS to avoid clashing with Bootstrap. [seocam]
