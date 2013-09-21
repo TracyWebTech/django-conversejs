@@ -3,6 +3,7 @@ from django.conf import settings
 
 # Django-conversejs settings
 CONVERSEJS_AUTO_REGISTER = getattr(settings, 'CONVERSEJS_AUTO_REGISTER', False)
+CONVERSEJS_ENABLED = getattr(settings, 'CONVERSEJS_ENABLED', True)
 
 
 def get_conversejs_settings():
