@@ -7,6 +7,7 @@ not released
 
 - Added CONVERSEJS_ENABLED setting. This allows the easily disable conversejs from the website. [seocam]
 - Updating migration to make compatible with Django 1.5 Custom Users [seocam]
+- Closing connections properly [seocam]
 
 
 0.2.6 (2013-09-19)
