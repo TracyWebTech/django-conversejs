@@ -8,8 +8,11 @@ from .register import register_account
 
 
 def get_conversejs_context(context, xmpp_login=False):
+
+    context['CONVERSEJS_ENABLED'] = conf.CONVERSEJS_ENABLED
+
     if not conf.CONVERSEJS_ENABLED:
-        return {'CONVERSEJS_ENABLED': conf.CONVERSEJS_ENABLED}
+        return context
 
     context.update(conf.get_conversejs_settings())
 
