@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-not released
+0.2.7 (2013-10-17)
 ------------
 
 - Added CONVERSEJS_ENABLED setting. This allows the easily disable conversejs from the website. [seocam]
