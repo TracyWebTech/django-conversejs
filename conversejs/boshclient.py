@@ -180,7 +180,6 @@ class BOSHClient(object):
         if not data:
             return None
 
-
         # This is XML. response_body contains the <body/> element of the
         # response.
         response_body = ET.fromstring(data)
@@ -199,7 +198,8 @@ class BOSHClient(object):
 
         # Get the allowed authentication methods using xpath
         search_for = '{{{0}}}features/{{{1}}}mechanisms/{{{2}}}mechanism'.format(
-                                JABBER_STREAMS_NS, XMPP_SASL_NS, XMPP_SASL_NS)
+            JABBER_STREAMS_NS, XMPP_SASL_NS, XMPP_SASL_NS
+        )
         self.log.debug('Looking for "%s" into response body', search_for)
         mechanisms = response_body.findall(search_for)
         self.server_auth = []
@@ -259,10 +259,12 @@ class BOSHClient(object):
         self.log.debug('Prepare the XMPP authentication')
 
         # Instantiate a sasl object
-        sasl = SASLClient(host=self.to,
-                         service='xmpp',
-                         username=self.jid,
-                         password=self.password)
+        sasl = SASLClient(
+            host=self.to,
+            service='xmpp',
+            username=self.jid,
+            password=self.password
+        )
 
         # Choose an auth mechanism
         sasl.choose_mechanism(self.server_auth, allow_anonymous=False)
