@@ -2,12 +2,13 @@ Changelog
 =========
 
 
-0.2.8 (not released)
+0.2.8 (2013-10-20)
 ------------
 
 - Python 2.6 compatibility fixes [chenhouwu]
 - Allowing http responses to be gziped [chenhouwu]
 - Fixing Digest-MD5 conformity issues [chenhouwu]
+- Converse.js updated to 0.6.6 [seocam]
 
 
 0.2.7 (2013-10-17)
