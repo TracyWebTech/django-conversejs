@@ -9,6 +9,8 @@ Based on https://friendpaste.com/1R4PCcqaSWiBsveoiq3HSy
 import base64
 import httplib
 import logging
+import StringIO
+import gzip
 
 from random import randint
 from urlparse import urlparse
@@ -145,6 +147,10 @@ class BOSHClient(object):
 
         if response.status == 200:
             data = response.read()
+            if response.getheader('content-encoding').lower() == 'gzip':
+                buf = StringIO.StringIO(data)
+                f = gzip.GzipFile(fileobj=buf)
+                data = f.read()
         else:
             self.log.debug('Something wrong happened!')
             return False
