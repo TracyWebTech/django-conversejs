@@ -195,7 +195,7 @@ class BOSHClient(object):
         search_for = '{{{0}}}features/{{{1}}}mechanisms/{{{2}}}mechanism'.format(
                                 JABBER_STREAMS_NS, XMPP_SASL_NS, XMPP_SASL_NS)
         self.log.debug('Looking for "%s" into response body', search_for)
-        mechanisms = response_body.iterfind(search_for)
+        mechanisms = response_body.findall(search_for)
         self.server_auth = []
 
         for mechanism in mechanisms:
