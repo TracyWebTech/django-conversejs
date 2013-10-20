@@ -2,6 +2,14 @@ Changelog
 =========
 
 
+0.2.8 (not released)
+------------
+
+- Python 2.6 compatibility fixes [chenhouwu]
+- Allowing http responses to be gziped [chenhouwu]
+- Fixing Digest-MD5 conformity issues [chenhouwu]
+
+
 0.2.7 (2013-10-17)
 ------------
 
