@@ -222,11 +222,20 @@ class BOSHClient(object):
         auth.set('mechanism', mechanism)
 
         resp_root = ET.fromstring(self.send_request(body))
-        challenge_node = resp_root.find('{{{0}}}challenge'.format(XMPP_SASL_NS))
+        success = self.check_authenticate_success(resp_root)
+        if success is None and\
+                resp_root.find('{{{0}}}challenge'.format(XMPP_SASL_NS)) is not None:
+            resp_root = self.send_challenge_response('')
+            return self.check_authenticate_success(resp_root)
+        return success
 
-        if challenge_node is not None:
-            return challenge_node.text
-
+    def check_authenticate_success(self, resp_root):
+        if resp_root.find('{{{0}}}success'.format(XMPP_SASL_NS)) is not None:
+            self.request_restart()
+            self.bind_resource()
+            return True
+        elif resp_root.find('{{{0}}}failure'.format(XMPP_SASL_NS)) is not None:
+            return False
         return None
 
     def send_challenge_response(self, response_plain):
