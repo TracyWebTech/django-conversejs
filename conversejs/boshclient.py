@@ -9,6 +9,8 @@ Based on https://friendpaste.com/1R4PCcqaSWiBsveoiq3HSy
 import base64
 import httplib
 import logging
+import StringIO
+import gzip
 
 from random import randint
 from urlparse import urlparse
@@ -48,7 +50,7 @@ class BOSHClient(object):
 
         """
         self.log = logging.getLogger('conversejs.boshclient')
-        self.log.addHandler(logging.NullHandler())
+        self.log.addHandler(NullHandler())
 
         self._connection = None
         self._sid = None
@@ -145,6 +147,10 @@ class BOSHClient(object):
 
         if response.status == 200:
             data = response.read()
+            if response.getheader('content-encoding').lower() == 'gzip':
+                buf = StringIO.StringIO(data)
+                f = gzip.GzipFile(fileobj=buf)
+                data = f.read()
         else:
             self.log.debug('Something wrong happened!')
             return False
@@ -174,7 +180,6 @@ class BOSHClient(object):
         if not data:
             return None
 
-
         # This is XML. response_body contains the <body/> element of the
         # response.
         response_body = ET.fromstring(data)
@@ -193,9 +198,10 @@ class BOSHClient(object):
 
         # Get the allowed authentication methods using xpath
         search_for = '{{{0}}}features/{{{1}}}mechanisms/{{{2}}}mechanism'.format(
-                                JABBER_STREAMS_NS, XMPP_SASL_NS, XMPP_SASL_NS)
+            JABBER_STREAMS_NS, XMPP_SASL_NS, XMPP_SASL_NS
+        )
         self.log.debug('Looking for "%s" into response body', search_for)
-        mechanisms = response_body.iterfind(search_for)
+        mechanisms = response_body.findall(search_for)
         self.server_auth = []
 
         for mechanism in mechanisms:
@@ -237,13 +243,7 @@ class BOSHClient(object):
 
         # Send the challenge response to server
         resp_root = ET.fromstring(self.send_request(body))
-
-        # Look for the success tag. If it's not present authentication
-        #   has failed
-        success = resp_root.find('{{{0}}}success'.format(XMPP_SASL_NS))
-        if success is not None:
-            return True
-        return False
+        return resp_root
 
     def authenticate_xmpp(self):
         """Authenticate the user to the XMPP server via the BOSH connection."""
@@ -253,10 +253,12 @@ class BOSHClient(object):
         self.log.debug('Prepare the XMPP authentication')
 
         # Instantiate a sasl object
-        sasl = SASLClient(host=self.to,
-                         service='xmpp',
-                         username=self.jid,
-                         password=self.password)
+        sasl = SASLClient(
+            host=self.to,
+            service='xmpp',
+            username=self.jid,
+            password=self.password
+        )
 
         # Choose an auth mechanism
         sasl.choose_mechanism(self.server_auth, allow_anonymous=False)
@@ -268,15 +270,23 @@ class BOSHClient(object):
         response = sasl.process(base64.b64decode(challenge))
 
         # Send response
-        success = self.send_challenge_response(response)
-        if not success:
+        resp_root = self.send_challenge_response(response)
+
+        success = self.check_authenticate_success(resp_root)
+        if success is None and\
+                resp_root.find('{{{0}}}challenge'.format(XMPP_SASL_NS)) is not None:
+            resp_root = self.send_challenge_response('')
+            return self.check_authenticate_success(resp_root)
+        return success
+
+    def check_authenticate_success(self, resp_root):
+        if resp_root.find('{{{0}}}success'.format(XMPP_SASL_NS)) is not None:
+            self.request_restart()
+            self.bind_resource()
+            return True
+        elif resp_root.find('{{{0}}}failure'.format(XMPP_SASL_NS)) is not None:
             return False
-
-        self.request_restart()
-
-        self.bind_resource()
-
-        return True
+        return None
 
     def bind_resource(self):
         body = self.get_body()
