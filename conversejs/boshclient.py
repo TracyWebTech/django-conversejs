@@ -147,7 +147,7 @@ class BOSHClient(object):
 
         if response.status == 200:
             data = response.read()
-            if response.getheader('content-encoding').lower() == 'gzip':
+            if response.getheader('content-encoding', '').lower() == 'gzip':
                 buf = StringIO.StringIO(data)
                 f = gzip.GzipFile(fileobj=buf)
                 data = f.read()
