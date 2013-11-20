@@ -6,11 +6,12 @@ Based on https://friendpaste.com/1R4PCcqaSWiBsveoiq3HSy
 
 """
 
+import gzip
+import socket
 import base64
 import httplib
 import logging
 import StringIO
-import gzip
 
 from random import randint
 from urlparse import urlparse
@@ -87,7 +88,7 @@ class BOSHClient(object):
             # TODO: raise proper exception
             raise Exception('Invalid URL scheme %s' % self.bosh_service.scheme)
 
-        self._connection = Connection(self.bosh_service.netloc)
+        self._connection = Connection(self.bosh_service.netloc, timeout=10)
         self.log.debug('Connection initialized')
         # TODO add exceptions handler there (URL not found etc)
 
@@ -308,7 +309,15 @@ class BOSHClient(object):
         self.send_request(body)
 
     def get_credentials(self):
-        success = self.authenticate_xmpp()
+        try:
+            success = self.authenticate_xmpp()
+        except socket.error as error:
+            success = False
+            self.log.exception(error)
+
+            msg = 'Error trying to connect to bosh service: %s'
+            self.log.error(msg, self.bosh_service.netloc)
+
         if not success:
             return None, None, None
 
