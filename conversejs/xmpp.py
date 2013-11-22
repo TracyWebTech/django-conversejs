@@ -35,6 +35,38 @@ else:
     raw_input = input
 
 
+class ChangePasswordBot(sleekxmpp.ClientXMPP):
+
+    """
+    A basic bot that will attempt to change the password for an account
+    with a XMPP server.
+
+    NOTE: It requires XEP-0077 plugin.
+    """
+
+    def __init__(self, jid, current_password, new_password):
+        sleekxmpp.ClientXMPP.__init__(self, jid, current_password)
+
+        self.new_password = new_password
+        self.add_event_handler("session_start", self.start)
+
+    def start(self, event):
+        self.send_presence()
+
+        try:
+            self['xep_0077'].change_password(self.new_password, self.boundjid.server, self.boundjid.bare)
+            logger.info("Password changed for %s!" % self.boundjid)
+        except IqError as e:
+            logger.error("Could not change password for account: %s" %
+                    e.iq['error']['text'])
+            self.disconnect()
+        except IqTimeout:
+            logger.error("No response from server.")
+            self.disconnect()
+        else:
+            self.disconnect(send_close=False)
+
+
 class RegisterBot(sleekxmpp.ClientXMPP):
 
     """
@@ -161,5 +193,26 @@ def register_account(jid, password, name=None, email=None):
     else:
         logger.error('Unable to connect to XMPP server.')
         return False
+
+    return True
+
+
+def change_password(xmpp_account, new_password):
+    # To change a user's password you it's necessary the jid, current
+    # password and new password.
+    client = ChangePasswordBot(xmpp_account.jid, xmpp_account.password,
+                               new_password)
+    client.register_plugin('xep_0077')
+
+    client['xep_0077'].create_account = False
+
+    if client.connect():
+        client.process(block=True)
+    else:
+        logger.error('Unable to connect to XMPP server.')
+        return False
+
+    xmpp_account.password = new_password
+    xmpp_account.save()
 
     return True

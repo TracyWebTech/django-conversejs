@@ -4,7 +4,7 @@ import uuid
 from . import conf
 from .models import XMPPAccount
 from .boshclient import BOSHClient
-from .register import register_account
+from .xmpp import register_account
 
 
 def get_conversejs_context(context, xmpp_login=False):
