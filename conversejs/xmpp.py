@@ -212,7 +212,4 @@ def change_password(xmpp_account, new_password):
         logger.error('Unable to connect to XMPP server.')
         return False
 
-    xmpp_account.password = new_password
-    xmpp_account.save()
-
     return True
