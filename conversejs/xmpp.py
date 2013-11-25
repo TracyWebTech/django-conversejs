@@ -197,11 +197,10 @@ def register_account(jid, password, name=None, email=None):
     return True
 
 
-def change_password(xmpp_account, new_password):
+def change_password(jid, old_password, new_password):
     # To change a user's password you it's necessary the jid, current
     # password and new password.
-    client = ChangePasswordBot(xmpp_account.jid, xmpp_account.password,
-                               new_password)
+    client = ChangePasswordBot(jid, old_password, new_password)
     client.register_plugin('xep_0077')
 
     client['xep_0077'].create_account = False
