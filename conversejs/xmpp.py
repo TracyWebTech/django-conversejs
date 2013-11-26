@@ -13,11 +13,10 @@
 
 import sys
 import logging
-import getpass
-from optparse import OptionParser
 
 import sleekxmpp
 from sleekxmpp.exceptions import IqError, IqTimeout
+from dns.resolver import NoNameservers
 
 
 # Get a logger
@@ -31,184 +30,74 @@ logger = logging.getLogger('conversejs.register')
 if sys.version_info < (3, 0):
     from sleekxmpp.util.misc_ops import setdefaultencoding
     setdefaultencoding('utf8')
-else:
-    raw_input = input
 
 
-class ChangePasswordBot(sleekxmpp.ClientXMPP):
-
-    """
-    A basic bot that will attempt to change the password for an account
-    with a XMPP server.
-
-    NOTE: It requires XEP-0077 plugin.
-    """
-
-    def __init__(self, jid, current_password, new_password):
-        sleekxmpp.ClientXMPP.__init__(self, jid, current_password)
-
-        self.new_password = new_password
-        self.add_event_handler("session_start", self.start)
-
-    def start(self, event):
-        self.send_presence()
-
-        try:
-            self['xep_0077'].change_password(self.new_password, self.boundjid.server, self.boundjid.bare)
-            logger.info("Password changed for %s!" % self.boundjid)
-        except IqError as e:
-            logger.error("Could not change password for account: %s" %
-                    e.iq['error']['text'])
-            self.disconnect()
-        except IqTimeout:
-            logger.error("No response from server.")
-            self.disconnect()
-        else:
-            self.disconnect(send_close=False)
+TIMEOUT = 10
 
 
-class RegisterBot(sleekxmpp.ClientXMPP):
+def register(client, username, password, name, email):
+    iq = client.Iq()
+    iq['type'] = 'set'
+    iq['register']['username'] = username
+    iq['register']['password'] = password
+    iq['register']['name'] = name
+    iq['register']['email'] = email
+    iq.send(now=True) #, timeout=TIMEOUT)
 
-    """
-    A basic bot that will attempt to register an account
-    with an XMPP server.
 
-    NOTE: This follows the very basic registration workflow
-          from XEP-0077. More advanced server registration
-          workflows will need to check for data forms, etc.
-    """
+def registration_wrapper(client, function, logger_success, logger_error,
+                         use_client, args, kwargs):
 
-    def __init__(self, jid, password, name=None, email=None):
-        sleekxmpp.ClientXMPP.__init__(self, jid, password)
+    connected = client.connect(reattempt=False)
 
-        self.name = name
-        self.email = email
-
-        # The session_start event will be triggered when
-        # the bot establishes its connection with the server
-        # and the XML streams are ready for use. We want to
-        # listen for this event so that we we can initialize
-        # our roster.
-        self.add_event_handler("session_start", self.start)
-
-        # The register event provides an Iq result stanza with
-        # a registration form from the server. This may include
-        # the basic registration fields, a data form, an
-        # out-of-band URL, or any combination. For more advanced
-        # cases, you will need to examine the fields provided
-        # and respond accordingly. SleekXMPP provides plugins
-        # for data forms and OOB links that will make that easier.
-        self.add_event_handler("register", self.register)
-
-        # Do not terminate session after disconnecting
-        self.end_session_on_disconnect = False
-
-    def start(self, event):
-        """
-        Process the session_start event.
-
-        Typical actions for the session_start event are
-        requesting the roster and broadcasting an initial
-        presence stanza.
-
-        Arguments:
-            event -- An empty dictionary. The session_start
-                     event does not provide any additional
-                     data.
-        """
-        self.send_presence()
-        self.get_roster()
-
-        # We're only concerned about registering, so nothing more to do here.
-        self.disconnect()
-
-    def register(self, iq):
-        """
-        Fill out and submit a registration form.
-
-        The form may be composed of basic registration fields, a data form,
-        an out-of-band link, or any combination thereof. Data forms and OOB
-        links can be checked for as so:
-
-        if iq.match('iq/register/form'):
-            # do stuff with data form
-            # iq['register']['form']['fields']
-        if iq.match('iq/register/oob'):
-            # do stuff with OOB URL
-            # iq['register']['oob']['url']
-
-        To get the list of basic registration fields, you can use:
-            iq['register']['fields']
-        """
-
-        resp = self.Iq()
-        resp['type'] = 'set'
-        resp['register']['username'] = self.boundjid.user
-        resp['register']['password'] = self.password
-
-        if self.name:
-            resp['register']['name'] = self.name
-
-        if self.email:
-            resp['register']['email'] = self.email
-
-        # TODO: Raise exception if fails
-        try:
-            resp.send(now=True)
-            logger.info("Account created for %s!" % self.boundjid)
-        except IqError as e:
-            logger.error("Could not register account: %s" %
-                    e.iq['error']['text'])
-            self.disconnect()
-        except IqTimeout:
-            logger.error("No response from server.")
-            self.disconnect()
-        else:
-            self.disconnect(send_close=False)
-
-def register_account(jid, password, name=None, email=None):
-    # Setup the RegisterBot and register plugins. Note that while plugins may
-    # have interdependencies, the order in which you register them does
-    # not matter.
-    xmpp = RegisterBot(jid, password, name, email)
-    xmpp.register_plugin('xep_0030') # Service Discovery
-    xmpp.register_plugin('xep_0004') # Data forms
-    xmpp.register_plugin('xep_0066') # Out-of-band Data
-    xmpp.register_plugin('xep_0077') # In-band Registration
-
-    # Some servers don't advertise support for inband registration, even
-    # though they allow it. If this applies to your server, use:
-    xmpp['xep_0077'].force_registration = True
-
-    # If you are working with an OpenFire server, you may need
-    # to adjust the SSL version used:
-    # xmpp.ssl_version = ssl.PROTOCOL_SSLv3
-
-    # If you want to verify the SSL certificates offered by a server:
-    # xmpp.ca_certs = "path/to/ca/cert"
-
-    # Connect to the XMPP server and start processing XMPP stanzas.
-    if xmpp.connect():
-        xmpp.process(block=True)
-    else:
+    if not connected:
         logger.error('Unable to connect to XMPP server.')
         return False
 
-    return True
+    client.process()
+
+    success = False
+    try:
+        if use_client:
+            function(client, *args, **kwargs)
+        else:
+            function(*args, **kwargs)
+        logger.info(logger_success % client.boundjid)
+        success = True
+    except IqError as e:
+        logger.error(logger_error % e.iq['error']['text'])
+    except IqTimeout:
+        logger.error("No response from server.")
+    finally:
+        client.disconnect()
+    return success
+
+
+def register_account(jid, password, name='', email=''):
+    client = sleekxmpp.ClientXMPP(jid, password)
+    client.register_plugin('xep_0077') # In-band Registration
+
+    registration_wrapper(
+        client=client,
+        function=register,
+        logger_success="Account created for %s!",
+        logger_error="Could not register account: %s",
+        use_client=True,
+        args=[client.boundjid.user, password, name, email],
+        kwargs={}
+    )
 
 
 def change_password(jid, old_password, new_password):
-    # To change a user's password you it's necessary the jid, current
-    # password and new password.
-    client = ChangePasswordBot(jid, old_password, new_password)
-    client.register_plugin('xep_0077')
+    client = sleekxmpp.ClientXMPP(jid, old_password)
+    client.register_plugin('xep_0077') # In-band Registration
 
-    client['xep_0077'].create_account = False
-
-    if client.connect():
-        client.process(block=True)
-    else:
-        logger.error('Unable to connect to XMPP server.')
-        return False
-
-    return True
+    registration_wrapper(
+        client=client,
+        function=client['xep_0077'].change_password,
+        logger_success="Password changed for %s!",
+        logger_error="Could not change password for account: %s",
+        use_client=False,
+        args=[new_password, client.boundjid.server, client.boundjid.bare],
+        kwargs=dict(timeout=TIMEOUT)
+    )
