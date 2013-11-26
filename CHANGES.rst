@@ -2,6 +2,15 @@ Changelog
 =========
 
 
+0.2.9 (2013-11-26)
+------------
+
+- Adding timeout to BOSH connections [seocam]
+- Adding function to change user password [LuanP]
+- Moving/refactor registration functions to xmpp.py [LuanP]
+- Better error handling on xmpp connections [LuanP]
+
+
 0.2.8 (2013-10-20)
 ------------
 
