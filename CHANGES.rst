@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.3.0 (2013-12-06)
+0.3 (2013-12-06)
 ------------
 
 - Adding CONVERSEJS_ALLOW_CONTACT_REQUESTS configuration variable. [LuanP]
