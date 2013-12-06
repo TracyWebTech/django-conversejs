@@ -2,6 +2,13 @@ Changelog
 =========
 
 
+0.2.9 (2013-12-06)
+------------
+
+- Adding CONVERSEJS_ALLOW_CONTACT_REQUESTS configuration variable. [LuanP]
+- Adding CONVERSEJS_SHOW_ONLY_ONLINE_USERS configuration variable. [LuanP]
+
+
 0.2.8 (2013-10-20)
 ------------
 
