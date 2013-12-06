@@ -22,6 +22,8 @@ def get_conversejs_settings():
         'CONVERSEJS_SHOW_CONTROLBOX_BY_DEFAULT': False,
         'CONVERSEJS_XHR_USER_SEARCH': False,
         'CONVERSEJS_DEBUG': settings.DEBUG,
+        'CONVERSEJS_SHOW_ONLY_ONLINE_USERS': False,
+        'CONVERSEJS_ALLOW_CONTACT_REQUESTS': True,
     }
 
     for key, value in converse_settings.items():
