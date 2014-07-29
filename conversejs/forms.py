@@ -8,3 +8,4 @@ class XMPPAccountForm(forms.ModelForm):
 
     class Meta:
         model = XMPPAccount
+        exclude = ()

@@ -2,11 +2,11 @@
 from django.db import models
 
 try:
-    from django.contrib.auth import get_user_model
+    from django.conf import settings
 except ImportError:
     from django.contrib.auth.models import User
 else:
-    User = get_user_model()
+    User = settings.AUTH_USER_MODEL
 
 
 class XMPPAccount(models.Model):
