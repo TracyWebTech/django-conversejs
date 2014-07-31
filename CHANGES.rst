@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.3.1 (2014-31-07)
+------------
+
+- Added support to Django 1.7 [@matheusfaria, @darksshades]
+- Updated sleekxmpp version to 1.3.1
+
 
 0.3 (2013-12-06)
 ------------

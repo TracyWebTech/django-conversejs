@@ -138,12 +138,3 @@ TODO
 * Allow user reset XMPP account password. That's useful to allow the use of other xmpp clients.
 * Allow user to set avatar
 * Auto update XMPP name and email when those are updated in django (using signals)
-
-
-IMPORTANT NOTE:
----------------
-
-
-django-conversejs depends of `SleekXMPP` that currently has a bug when used with gevent. This bug has been already fixed in the development branch but still not released as stable. While this is not released the install instructions will point to TracyWebTech repository that has the stable version with the gevent patch applied.
-
-Sorry for the inconvenience.
