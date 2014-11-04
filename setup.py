@@ -14,12 +14,15 @@ package_data_globs = [
     'static/converse.js/*.js',
     'static/converse.js/*.css',
     'static/converse.js/images/*',
+    'static/converse.js/fonticons/*.js',
+    'static/converse.js/fonticons/*.css',
+    'static/converse.js/fonticons/fonts/*',
 ]
 
 setup(
     name='django-conversejs',
     description='Adds converse.js (javascript XMPP client) to Django',
-    version='0.3.1',
+    version='0.3.4',
     long_description=read('README.rst'),
     packages=['conversejs',
               'conversejs.migrations',
