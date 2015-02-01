@@ -18,13 +18,6 @@ Currently ``django-conversejs`` provides:
 Installing and configuring
 ---------------------------
 
-
-Install SleekXMPP from ``TracyWebTech/fix-gevent`` branch:
-
-::
-
-    pip install git+https://github.com/TracyWebTech/SleekXMPP@fix-gevent
-
 Install django-conversejs:
 
 ::
