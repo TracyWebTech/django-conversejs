@@ -46,7 +46,7 @@ setup(
         ],
     install_requires=[
         'pure-sasl==0.1.5',
-        'sleekxmpp==1.1.11',
+        'sleekxmpp==1.3.2',
         'dnspython==1.11.1',
         ],
 )
